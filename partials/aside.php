@@ -29,7 +29,7 @@
       <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
       
       <?php if ($_SESSION['role'] == 'Inventaris Kantor') { ?>
-          <li class="menu-item <?php echo ($current_page == 'peminjaman.php' || $current_page == 'peminjaman_dtl.php') ? 'active' : ''; ?>">
+          <li class="menu-item <?php echo ($current_page == 'peminjaman.php' || $current_page == 'peminjaman_dtl.php'|| $current_page == 'riwayat_pem.php'|| $current_page == 'riwayat_pem_dtl.php') ? 'active' : ''; ?>">
               <a href="peminjaman.php" class="menu-link">
                   <i class="menu-icon tf-icons bx bx-collection"></i>
                   <div data-i18n="Basic">Peminjaman</div>

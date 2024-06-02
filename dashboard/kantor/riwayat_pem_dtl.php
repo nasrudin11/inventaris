@@ -103,67 +103,45 @@
                 }
             ?>
 
-              <div class="card mb-4">
-                  <div class="table-responsive text-nowrap">
-                      <table class="table table-striped">
-                          <thead>
-                              <tr>
-                                  <th>NO</th>
-                                  <th>ID Barang</th>
-                                  <th>Nama Barang</th>
-                                  <th>Jumlah</th>
-                                  <th>Status</th>
-                                  <th>Actions</th>
-                              </tr>
-                          </thead>
-                          <tbody class="table-border-bottom-0">
-                              <?php
-                              $query = "SELECT pd.*, b.nama_barang, b.id_barang, b.status_barang, p.id_peminjaman, p.nama_peminjam
-                                        FROM peminjaman_dtl pd 
-                                        JOIN barang b ON pd.id_barang = b.id_barang 
-                                        JOIN peminjaman p ON p.id_peminjaman = pd.id_peminjaman
-                                        WHERE pd.id_peminjaman = {$_GET['id_peminjaman']}";
-                              $result = $koneksi->query($query); // Eksekusi query
 
-                              if ($result && $result->num_rows > 0) {
-                                  $no = 1;
-                                  while ($row = $result->fetch_assoc()) {
-                                      ?>
-                                      <tr>
-                                          <td><?php echo $no++; ?></td>
-                                          <td><?php echo $row['id_barang']; ?></td>
-                                          <td><?php echo $row['nama_barang']; ?></td>
-                                          <td><?php echo $row['jumlah']; ?></td>
-                                          <td>
-                                              <select class="form-select" id="exampleFormControlSelect1">
-                                                  <option selected><?php echo $row['status_barang']; ?></option>
-                                                  <option value="Baik">Baik</option>
-                                                  <option value="Rusak">Rusak</option>
-                                              </select>
-                                          </td>
-                                          <td>
-                                              <?php if ($row['status'] == 'dipinjam') { ?>
-                                                  <form action="../../controller/return_peminjaman.php" method="POST">
-                                                      <input type="hidden" name="id_peminjaman" value="<?php echo $row['id_peminjaman']; ?>">
-                                                      <input type="hidden" name="id_peminjaman_dtl" value="<?php echo $row['id_peminjaman_dtl']; ?>">
-                                                      <button type="submit" class="btn btn-primary" style="background-color: #3ac7c0; border:none" name="submit">Return</button>
-                                                  </form>
-                                              <?php } else { ?>
-                                                  <button class="btn btn-primary" style="background-color: #3ac7c0; border:none" name="submit" disabled>Returned</button>
-                                              <?php } ?>
-                                          </td>
-                                      </tr>
-                                      <?php
-                                  }
-                              } else {
-                                  echo "<tr><td colspan='6'>Tidak ada data peminjaman barang</td></tr>";
-                              }
-                              ?>
-                          </tbody>
-                      </table>
-                  </div>
-              </div>
+            <?php
+                $query = "SELECT pd.*, b.nama_barang, b.id_barang, b.status_barang, p.id_peminjaman, p.nama_peminjam
+                FROM peminjaman_dtl pd 
+                JOIN barang b ON pd.id_barang = b.id_barang 
+                JOIN peminjaman p ON p.id_peminjaman = pd.id_peminjaman
+                WHERE pd.id_peminjaman = {$_GET['id_peminjaman']}";
+                $result = $koneksi->query($query);
+            
+                $row = $result->fetch_assoc();
+                $no = 1;
+            ?>
 
+                <div class="card mb-4">
+                    <div class="table-responsive text-nowrap">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>NO</th>
+                                        <th>ID Barang.</th>
+                                        <th>Nama Barang</th>
+                                        <th>Jumlah</th>
+                                        <th>tgl_kembali</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <td><?php echo $no++; ?></td>
+                                    <td><?php echo $row['id_barang'] ?></td>
+                                    <td><?php echo $row['nama_barang'] ?></td>
+                                    <td><?php echo $row['jumlah'] ?></td>
+                                    <td><?php echo $row['tgl_pengembalian_dtl'] ?></td>
+                                    <td><button class='btn btn-primary' style='background-color: #3ac7c0; border:none' name='submit' disabled>Returned</button></td>
+                                     
+                                </tbody>
+                            </table>
+                        </div>    
+                    
+                </div>
                             
             </div>
             <!-- / Content -->

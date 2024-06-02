@@ -98,63 +98,98 @@
             ?>
 
             <div class="text-end mb-3">
-                <a href="#" class="btn btn-secondary">Riwayat</a>
+                <a href="riwayat_pem.php" class="btn btn-secondary">Riwayat</a>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPeminjaman">Peminjaman Baru</button>
             </div>
 
               <!-- Modal Tambah Barang -->
               <div class="modal fade" id="modalPeminjaman" tabindex="-1" aria-labelledby="modalPeminjamanLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title" id="modalPeminjamanLabel">Peminjaman Baru</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                              <!-- Form tambah barang -->
-                              <form action="../../controller/tambah_peminjaman.php" method="POST">
-                                  <!-- Input untuk nama barang -->
-                                  <div class="mb-3">
-                                      <label for="namaPeminjam" class="form-label">Nama Peminjam</label>
-                                      <input type="text" class="form-control" id="namaPeminjam" name="nama_peminjam" placeholder="Nama Peminjam" required>
-                                  </div>
-                                  <!-- Input untuk id_barang -->
-                                  <div class="mb-3">
-                                    <div class="row">
-                                      <div class="col">
-                                        <label for="idBarang" class="form-label">ID barang</label>
-                                        <input type="text" class="form-control" id="idBarang" name="id_barang" placeholder="ID Barang" required>
-                                      </div>
-                                      <div class="col">
-                                        <label for="jumlah" class="form-label">Jumlah</label>
-                                        <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="Jumlah" required>
-                                      </div>
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalPeminjamanLabel">Peminjaman Baru</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form tambah barang -->
+                            <form action="../../controller/tambah_peminjaman.php" method="POST">
+                                <!-- Input untuk nama peminjam -->
+                                <div class="mb-3">
+                                    <label for="namaPeminjam" class="form-label">Nama Peminjam</label>
+                                    <input type="text" class="form-control" id="namaPeminjam" name="nama_peminjam" placeholder="Nama Peminjam" required>
+                                </div>
+                                <!-- Container untuk id_barang dan jumlah -->
+                                <div id="barangContainer">
+                                    <div class="mb-3 barang-item">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="idBarang" class="form-label">ID Barang</label>
+                                                <input type="text" class="form-control" id="idBarang" name="id_barang[]" placeholder="ID Barang" required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="jumlah" class="form-label">Jumlah</label>
+                                                <input type="number" class="form-control" id="jumlah" name="jumlah[]" placeholder="Jumlah" required>
+                                            </div>
+                                        </div>
                                     </div>
-                                  </div>
-                                  
-                                  <div class="mb-3">
-                                    <div class="row">
-                                      <!-- Input untuk tgl peminjaman -->
-                                      <div class="col">
-                                        <label for="tglPeminjaman" class="form-label">Tanggal Peminjaman</label>
-                                        <input type="date" class="form-control" id="tglPeminjaman" name="tgl_peminjaman" required>
-                                      </div>
+                                </div>
 
-                                      <!-- Input untuk tgl pegembalian -->
-                                      <div class="col">
-                                        <label for="tglPengembalian" class="form-label">Tanggal Pengembalian</label>
-                                        <input type="date" class="form-control" id="tglPengembalian" name="tgl_pengembalian" required>
-                                      </div>
+                                <!-- Tombol untuk menambah dan mengurangi id_barang dan jumlah -->
+                                <div class="mb-3">
+                                  <button type="button" class="btn btn-secondary" id="addBarangButton">Tambah</button>
+                                  <button type="button" class="btn btn-danger" id="removeBarangButton">Batal</button>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="row">
+                                        <!-- Input untuk tgl peminjaman -->
+                                        <div class="col">
+                                            <label for="tglPeminjaman" class="form-label">Tanggal Peminjaman</label>
+                                            <input type="date" class="form-control" id="tglPeminjaman" name="tgl_peminjaman" required>
+                                        </div>
+                                        <!-- Input untuk tgl pengembalian -->
+                                        <div class="col">
+                                            <label for="tglPengembalian" class="form-label">Tanggal Pengembalian</label>
+                                            <input type="date" class="form-control" id="tglPengembalian" name="tgl_pengembalian" required>
+                                        </div>
                                     </div>
-                                      
-                                  </div>
-                                  <!-- Tombol untuk menyimpan data -->
-                                  <button type="submit" class="btn btn-primary">Simpan</button>
-                              </form>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+                                </div>
+                                <!-- Tombol untuk menyimpan data -->
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.getElementById('addBarangButton').addEventListener('click', function() {
+                    var barangContainer = document.getElementById('barangContainer');
+                    var newBarangItem = document.createElement('div');
+                    newBarangItem.className = 'mb-3 barang-item';
+                    newBarangItem.innerHTML = `
+                        <div class="row">
+                            <div class="col">
+                                <label for="idBarang" class="form-label">ID Barang</label>
+                                <input type="text" class="form-control" name="id_barang[]" placeholder="ID Barang" required>
+                            </div>
+                            <div class="col">
+                                <label for="jumlah" class="form-label">Jumlah</label>
+                                <input type="number" class="form-control" name="jumlah[]" placeholder="Jumlah" required>
+                            </div>
+                        </div>
+                    `;
+                    barangContainer.appendChild(newBarangItem);
+                });
+
+                document.getElementById('removeBarangButton').addEventListener('click', function() {
+                    var barangContainer = document.getElementById('barangContainer');
+                    var barangItems = barangContainer.getElementsByClassName('barang-item');
+                    if (barangItems.length > 1) {
+                        barangContainer.removeChild(barangItems[barangItems.length - 1]);
+                    }
+                });
+            </script>
 
               <div class="card">
                 <div class="table-responsive text-nowrap">
@@ -171,11 +206,11 @@
                         </thead>
                         <tbody class="table-border-bottom-0">
                           <?php
-                            $query = "SELECT p.*, pd.jumlah, b.nama_barang
+                            $query = " SELECT p.*, SUM(pd.jumlah) AS total_jumlah
                             FROM peminjaman p
                             JOIN peminjaman_dtl pd ON p.id_peminjaman = pd.id_peminjaman
-                            JOIN barang b ON pd.id_barang = b.id_barang
-                            WHERE p.id_user = '{$_SESSION['id']}' AND p.status = 'dipinjam'";
+                            WHERE p.id_user = '{$_SESSION['id']}' AND p.status = 'dipinjam'
+                            GROUP BY p.id_peminjaman DESC";
                             $result = $koneksi->query($query);
 
                             if ($result && $result->num_rows > 0) {
@@ -184,7 +219,7 @@
                                     echo "<tr>";
                                     echo "<td>" . $no . "</td>";
                                     echo "<td>" . $row['nama_peminjam'] . "</td>";
-                                    echo "<td>" . $row['nama_barang'] . "</td>";
+                                    echo "<td>" . $row['total_jumlah'] . "</td>";
                                     echo "<td>" . $row['tgl_peminjaman'] . "</td>";
                                     echo "<td>" . $row['tgl_pengembalian'] . "</td>";
                                     echo '<td>

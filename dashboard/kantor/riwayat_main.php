@@ -82,6 +82,20 @@
           <div class="content-wrapper">
             <!-- Content -->
             <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row mb-3">
+                    <div class="col">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="maintenance.php">Maintenance</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Riwayat</li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                    <div class="col text-end">
+                        <a href="" class="btn btn-secondary ">Cetak</a>
+                    </div>
+                </div>              
 
             <?php
                 if (isset($_SESSION['pesan'])) {
@@ -97,42 +111,6 @@
                 }
             ?>
 
-            <div class="text-end mb-3">
-                <a href="riwayat_main.php" class="btn btn-secondary">Riwayat</a>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPeminjaman">Maintenance Baru</button>
-            </div>
-
-              <!-- Modal Tambah Barang -->
-              <div class="modal fade" id="modalPeminjaman" tabindex="-1" aria-labelledby="modalMaintenanceLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title" id="modalMaintenanceLabel">Maintenance Baru</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                              <!-- Form tambah barang -->
-                              <form action="../../controller/tambah_maintenance.php" method="POST">
-                                  <!-- Input untuk id_barang -->
-                                  <div class="mb-3">
-                                    <div class="row">
-                                      <div class="col">
-                                        <label for="idBarang" class="form-label">ID barang</label>
-                                        <input type="text" class="form-control" id="idBarang" name="id_barang" placeholder="ID Barang" required>
-                                      </div>
-                                      <div class="col">
-                                        <label for="jumlah" class="form-label">Jumlah</label>
-                                        <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="Jumlah" required>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <!-- Tombol untuk menyimpan data -->
-                                  <button type="submit" class="btn btn-primary">Simpan</button>
-                              </form>
-                          </div>
-                      </div>
-                  </div>
-              </div>
 
               <div class="card">
                 <div class="table-responsive text-nowrap">
@@ -144,7 +122,8 @@
                                 <th>nama Barang</th>
                                 <th>jumlah</th>
                                 <th>tgl maintenance</th>
-                                <th>Actions</th>
+                                <th>tgl kembali</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
@@ -153,8 +132,7 @@
                             FROM maintenance m
                             JOIN user u ON m.id_user = u.id_user
                             JOIN barang b ON m.id_barang = b.id_barang
-                            WHERE u.id_user = '{$_SESSION['id']}' AND m.status_maintenance = 'maintenance'
-                            ORDER BY m.id_maintenance DESC";
+                            WHERE u.id_user = '{$_SESSION['id']}' AND m.status_maintenance = 'dikembalikan'";
                             $result = $koneksi->query($query);
 
                             if ($result && $result->num_rows > 0) {
@@ -166,20 +144,13 @@
                                     echo "<td>" . $row['nama_barang'] . "</td>";
                                     echo "<td>" . $row['jumlah'] . "</td>";
                                     echo "<td>" . $row['tgl_maintenance'] . "</td>";
-                                    echo '<td>
-                                            <form action="../../controller/return_maintenance.php" method="POST">
-                                                <input type="hidden" name="id_peminjaman" value="'.$row['id_maintenance'].'">
-                                                <button type="submit" class="btn btn-primary" style="background-color: #3ac7c0; border:none" name="return_maintenance">
-                                                    Return
-                                                </button>
-                                            </form>
-                                          </td>';
+                                    echo "<td>" . $row['tgl_main_kembali'] . "</td>";
+                                    echo "<td><button class='btn btn-primary' style='background-color: #3ac7c0; border:none' name='submit' disabled>Returned</button></td>";
                                     echo "</tr>";
                                     $no++;
-
                                 }
                             } else {
-                                echo "<tr><td colspan='7'>Tidak ada data barang maintenance</td></tr>";
+                                echo "<tr><td colspan='7'>Tidak ada riwayat data barang maintenance</td></tr>";
                             }
                             ?>
                         </tbody>
