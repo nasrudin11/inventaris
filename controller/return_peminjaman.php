@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($koneksi->query($query) === TRUE) {
         $_SESSION['pesan'] = "Data barang berhasil diperbarui.";
-        $koneksi->query($query2 = "INSERT INTO riwayat (id_user, riwayat) VALUES ('{$_SESSION['id']}', 'Edit the item')");
+        $koneksi->query($query2 = "INSERT INTO riwayat (id_user, riwayat) VALUES ('{$_SESSION['id']}', 'Return the loans item')");
 
         header("Location: ../dashboard/kantor/peminjaman_dtl.php?id_peminjaman=$id_peminjaman");
         exit();

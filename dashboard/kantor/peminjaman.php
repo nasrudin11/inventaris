@@ -198,9 +198,9 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Nama</th>
-                                <th>JUmlah Barang</th>
-                                <th>tgl pinjam</th>
-                                <th>tgl kembali</th>
+                                <th>total</th>
+                                <th>tgl peminjaman</th>
+                                <th>tgl pengembalian</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

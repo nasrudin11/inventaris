@@ -114,17 +114,17 @@
                         <th>No.</th>
                         <th>Nama</th>
                         <th>Jumlah Barang</th>
-                        <th>Tgl Pinjam</th>
-                        <th>Tgl Kembali</th>
+                        <th>Tgl peminjaman</th>
+                        <th>Tgl pengembalian</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
                       <?php
-                        $query = "SELECT p.*, pd.jumlah, b.nama_barang
+                        $query = " SELECT p.*, SUM(pd.jumlah) AS total_jumlah
                         FROM peminjaman p
                         JOIN peminjaman_dtl pd ON p.id_peminjaman = pd.id_peminjaman
-                        JOIN barang b ON pd.id_barang = b.id_barang
-                        WHERE p.id_user = '{$_SESSION['id']}' AND p.status = 'dikembalikan'";
+                        WHERE p.id_user = '{$_SESSION['id']}' AND p.status = 'dikembalikan'
+                        GROUP BY p.id_peminjaman DESC";
                         $result = $koneksi->query($query);
 
                         if ($result && $result->num_rows > 0) {
@@ -133,7 +133,7 @@
                             echo "<tr class='clickable-row' data-href='riwayat_pem_dtl.php?id_peminjaman={$row['id_peminjaman']}'>";
                             echo "<td>" . $no . "</td>";
                             echo "<td>" . $row['nama_peminjam'] . "</td>";
-                            echo "<td>" . $row['nama_barang'] . "</td>";
+                            echo "<td>" . $row['total_jumlah'] . "</td>";
                             echo "<td>" . $row['tgl_peminjaman'] . "</td>";
                             echo "<td>" . $row['tgl_pengembalian'] . "</td>";
                             echo "</tr>";

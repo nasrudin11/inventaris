@@ -103,45 +103,52 @@
                 }
             ?>
 
+              <div class="card mb-4">
+                  <div class="table-responsive text-nowrap">
+                          <table class="table table-striped">
+                              <thead>
+                                  <tr>
+                                      <th>NO</th>
+                                      <th>ID Barang.</th>
+                                      <th>Nama Barang</th>
+                                      <th>Jumlah</th>
+                                      <th>tgl_kembali</th>
+                                      <th>Status</th>
+                                  </tr>
+                              </thead>
+                              <tbody class="table-border-bottom-0">
 
-            <?php
-                $query = "SELECT pd.*, b.nama_barang, b.id_barang, b.status_barang, p.id_peminjaman, p.nama_peminjam
-                FROM peminjaman_dtl pd 
-                JOIN barang b ON pd.id_barang = b.id_barang 
-                JOIN peminjaman p ON p.id_peminjaman = pd.id_peminjaman
-                WHERE pd.id_peminjaman = {$_GET['id_peminjaman']}";
-                $result = $koneksi->query($query);
-            
-                $row = $result->fetch_assoc();
-                $no = 1;
-            ?>
-
-                <div class="card mb-4">
-                    <div class="table-responsive text-nowrap">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>NO</th>
-                                        <th>ID Barang.</th>
-                                        <th>Nama Barang</th>
-                                        <th>Jumlah</th>
-                                        <th>tgl_kembali</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-border-bottom-0">
-                                    <td><?php echo $no++; ?></td>
-                                    <td><?php echo $row['id_barang'] ?></td>
-                                    <td><?php echo $row['nama_barang'] ?></td>
-                                    <td><?php echo $row['jumlah'] ?></td>
-                                    <td><?php echo $row['tgl_pengembalian_dtl'] ?></td>
-                                    <td><button class='btn btn-primary' style='background-color: #3ac7c0; border:none' name='submit' disabled>Returned</button></td>
-                                     
-                                </tbody>
-                            </table>
-                        </div>    
-                    
-                </div>
+                              <?php
+                                  $query = "SELECT pd.*, b.nama_barang, b.id_barang, b.status_barang, p.id_peminjaman, p.nama_peminjam
+                                  FROM peminjaman_dtl pd 
+                                  JOIN barang b ON pd.id_barang = b.id_barang 
+                                  JOIN peminjaman p ON p.id_peminjaman = pd.id_peminjaman
+                                  WHERE pd.id_peminjaman = {$_GET['id_peminjaman']} ";
+                                  $result = $koneksi->query($query);
+                              
+                                 if ($result && $result->num_rows > 0) {
+                                  $no = 1;
+                                  while ($row = $result->fetch_assoc()) {
+                                    echo "<tr class='clickable-row' data-href='riwayat_pem_dtl.php?id_peminjaman={$row['id_peminjaman']}'>";
+                                    echo "<td>" . $no++ . "</td>";
+                                    echo "<td>" . $row['id_barang'] . "</td>";
+                                    echo "<td>" . $row['nama_barang'] . "</td>";
+                                    echo "<td>" . $row['jumlah'] . "</td>";
+                                    echo "<td>" . $row['tgl_pengembalian_dtl'] . "</td>";
+                                    echo "<td><button class='btn btn-primary' style='background-color: #3ac7c0; border:none' name='submit' disabled>Returned</button></td>";
+                                    echo "</tr>";
+                                    $no++;
+                                  }
+                                } else {
+                                  echo "<tr><td colspan='5'>Tidak ada data peminjaman barang</td></tr>";
+                                }
+                              ?>
+                                                                 
+                              </tbody>
+                          </table>
+                      </div>    
+                  
+              </div>
                             
             </div>
             <!-- / Content -->
