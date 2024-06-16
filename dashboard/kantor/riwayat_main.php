@@ -93,24 +93,92 @@
                     </div>
 
                     <div class="col text-end">
-                        <a href="" class="btn btn-secondary ">Cetak</a>
+                        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#cetakModal">Cetak</button>
                     </div>
-                </div>              
+                </div>  
+                
+              <!-- Tambahkan modal -->
+              <div class="modal fade" id="cetakModal" tabindex="-1" aria-labelledby="cetakModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="cetakModalLabel">Cetak Data</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="cetak_main.php" method="POST" >
+                        <div class="form-group">
+                          <label for="bulan">Rentang Bulan</label>
+                          <div class="row">
+                            <div class="col">
+                              <select class="form-control" id="bulan_awal" name="bulan_awal">
+                                <option value="1">Januari</option>
+                                <option value="2">Februari</option>
+                                <option value="3">Maret</option>
+                                <option value="4">April</option>
+                                <option value="5">Mei</option>
+                                <option value="6">Juni</option>
+                                <option value="7">Juli</option>
+                                <option value="8">Agustus</option>
+                                <option value="9">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                              </select>
+                            </div>
+                            <div class="col">
+                              <select class="form-control" id="bulan_akhir" name="bulan_akhir">
+                                <option value="1">Januari</option>
+                                <option value="2">Februari</option>
+                                <option value="3">Maret</option>
+                                <option value="4">April</option>
+                                <option value="5">Mei</option>
+                                <option value="6">Juni</option>
+                                <option value="7">Juli</option>
+                                <option value="8">Agustus</option>
+                                <option value="9">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="tahun">Tahun</label>
+                          <input type="number" class="form-control" id="tahun" name="tahun" value="<?php echo date('Y'); ?>" min="1900" max="2099" required>
+                        </div>
+                        <div class="text-end mt-3">
+                          <button type="submit" class="btn btn-primary">Cetak</button>
+                        </div>
+                        
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-            <?php
-                if (isset($_SESSION['pesan'])) {
-                    echo "<div class='alert alert-success' id='notification'>{$_SESSION['pesan']}</div>";
+              <script>
+                  document.addEventListener("DOMContentLoaded", function() {
+                  // Set nilai default untuk bulan dan tahun
+                  document.getElementById('bulan_awal').value = new Date().getMonth() + 1;
+                  document.getElementById('bulan_akhir').value = new Date().getMonth() + 1;
+                });
+              </script>
 
-                    echo "<script>
-                            setTimeout(function() {
-                            document.getElementById('notification').remove();
-                            }, 3000);
-                        </script>";
+              <?php
+                  if (isset($_SESSION['pesan'])) {
+                      echo "<div class='alert alert-success' id='notification'>{$_SESSION['pesan']}</div>";
 
-                    unset($_SESSION['pesan']);
-                }
-            ?>
+                      echo "<script>
+                              setTimeout(function() {
+                              document.getElementById('notification').remove();
+                              }, 3000);
+                          </script>";
 
+                      unset($_SESSION['pesan']);
+                  }
+              ?>
 
               <div class="card">
                 <div class="table-responsive text-nowrap">

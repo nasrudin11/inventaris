@@ -11,11 +11,11 @@ header("Content-Type: application/vnd.ms-excel");
 header("Content-Disposition: attachment; filename=data_barang.xls");
 
 // Buat header baris Excel
-echo "Nama Barang\tKategori\tStok\tLokasi\tDeskripsi\n";
+echo "ID Barang\Nama Barang\tKategori\tStok\tLokasi\tDeskripsi\n";
 
 // Isi data barang
 while ($row = $result->fetch_assoc()) {
-    echo $$row['nama_barang'] . "\t" . $row['kategori'] . "\t" . $row['stok'] . "\t" . $row['lokasi'] . "\t" . $row['deskripsi']  ."\n";
+    echo $row['id_barang'] . "\t" .$row['nama_barang'] . "\t" . $row['kategori'] . "\t" . $row['stok'] . "\t" . $row['lokasi'] . "\t" . $row['deskripsi']  ."\n";
 }
 
 

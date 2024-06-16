@@ -16,13 +16,19 @@
   <head>
     <meta charset="utf-8" />
     <meta
-      name="viewport"
+      nama="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
     <title>Dashboard - Kantor</title>
+    <style>
+        .card:hover {
+            transform: scale(1.04);
+            transition: transform 0.3s;
+        }
+    </style>
 
-    <meta name="description" content="" />
+    <meta nama="description" content="" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
@@ -82,9 +88,44 @@
           <div class="content-wrapper">
             <!-- Content -->
             <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="mb-3 text-end">
+              <a href="riwayat_order_k.php" class="btn btn-secondary ">Riwayat</a>
+                <a href="myorder.php" class="btn btn-primary ">My Order</a>
+              </div> 
 
+              <div class="row">
+                <?php
 
+                  $query = "SELECT u.id_user, u.role, p.nama, p.gambar_profil FROM user u
+                  JOIN profil p ON u.id_user = p.id_user WHERE role = 'Distributor'";
+                  $result = $koneksi->query($query);
+
+                  if ($result->num_rows > 0) {
+                    // Output data dari setiap row
+                    while($row = $result->fetch_assoc()) {
+                        echo '
+                        <div class="col-md-3">
+                          <a href="order_k_dtl.php?id_user='.$row["id_user"].'" class="hover">
+                            <div class="card shadow p-2">
+                                <img src="../../img/upload/profil/' . $row["gambar_profil"] . '" class="card-img-top" alt="' . $row["gambar_profil"] . '" style="width: 200px, height: 200px; object-fit: cover;">
+                                <div class="card-body p-0">
+                                <hr>
+                                    <h5 class="card-title text-center">' . $row["nama"] . '</h5>
+                                </div>
+                            </div>
+                            </a>
+                        </div>';
+                    }
+                
+                  } else {
+                      echo "0 results";
+                  }
+
+                  $koneksi->close();
+                ?>
+              </div>
             </div>
+
             <!-- / Content -->
 
             <div class="content-backdrop fade"></div>

@@ -102,7 +102,7 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPeminjaman">Peminjaman Baru</button>
             </div>
 
-              <!-- Modal Tambah Barang -->
+              <!-- Modal Tambah Peminajaman Barang -->
               <div class="modal fade" id="modalPeminjaman" tabindex="-1" aria-labelledby="modalPeminjamanLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -111,7 +111,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <!-- Form tambah barang -->
+                            <!-- Form tambah Peminajaman barang -->
                             <form action="../../controller/tambah_peminjaman.php" method="POST">
                                 <!-- Input untuk nama peminjam -->
                                 <div class="mb-3">
@@ -273,11 +273,6 @@
                                                   <input type="text" class="form-control" id="editLokasi" name="lokasi" value="<?php echo $row['lokasi']; ?>" placeholder="Lokasi">
                                                 </div>
                                               </div>
-                                            </div>
-                                            
-                                            <div class="mb-3">
-                                                <label for="editDeskripsi" class="form-label">Deskripsi</label>
-                                                <textarea class="form-control" id="editDeskripsi" name="deskripsi" rows="3" placeholder="Deskripsi"><?php echo $row['deskripsi']; ?></textarea>
                                             </div>
                                             
                                             <input type="hidden" name="id_barang" value="<?php echo $row['id_barang']; ?>">

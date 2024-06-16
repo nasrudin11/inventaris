@@ -7,8 +7,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kategori = $_POST["kategori"];
     $deskripsi = $_POST["deskripsi"];
     $stok = $_POST["stok"];
+    $harga = $_POST["harga"];
 
-    $query = "INSERT INTO barang (id_user, nama_barang, kategori, stok, lokasi, deskripsi) VALUES ('{$_SESSION['id']}','$nama_barang', '$kategori', $stok, '$lokasi', '$deskripsi')";
+    $query = "INSERT INTO barang (id_user, nama_barang, kategori, stok, lokasi, harga) VALUES ('{$_SESSION['id']}','$nama_barang', '$kategori', $stok, '$lokasi', '$harga')";
 
     if ($koneksi->query($query) === TRUE) {
         $_SESSION['pesan'] = "Data barang berhasil ditambahkan.";
