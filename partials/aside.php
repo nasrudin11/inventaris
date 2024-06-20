@@ -18,12 +18,40 @@
 
   <ul class="menu-inner py-1">
       <!-- Dashboard -->
-      <li class="menu-item <?php echo ($current_page == 'kantor.php' || $current_page == 'distributor.php') ? 'active' : ''; ?>">
-          <a href="<?php echo ($_SESSION['role'] === 'Inventaris Kantor') ? 'kantor.php' : 'distributor.php'; ?>" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-home-circle"></i>
-              <div data-i18n="Analytics">Dashboard</div>
-          </a>
-      </li>
+      <?php
+        if ($_SESSION['role'] == 'Inventaris Kantor') {
+        ?>
+            <li class="menu-item <?php echo ($current_page == 'kantor.php' || $current_page == 'barang_keluar.php') ? 'active open' : ''; ?>">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                    <div data-i18n="Analytics">Dashboard</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item <?php echo ($current_page == 'kantor.php') ? 'active' : ''; ?>">
+                        <a href="kantor.php" class="menu-link">
+                            <div data-i18n="Account">Data Barang</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <?php echo ($current_page == 'barang_keluar.php') ? 'active' : ''; ?>">
+                        <a href="barang_keluar.php" class="menu-link">
+                            <div data-i18n="Notifications">Barang Keluar</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        <?php
+        } elseif ($_SESSION['role'] == 'Distributor') {
+        ?>
+            <li class="menu-item <?php echo ($current_page == 'distributor.php') ? 'active' : ''; ?>">
+                <a href="distributor.php" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                    <div data-i18n="Analytics">Dashboard</div>
+                </a>
+            </li>
+        <?php
+        }
+        ?>
+
 
       <!-- Components -->
       <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>

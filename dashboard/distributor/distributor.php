@@ -14,7 +14,7 @@ if (isset($_POST['query'])) {
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
             echo "<td>" . $no . "</td>";
-            echo "<td>" . $row['id_barang'] . "</td>";
+            echo "<td><img src='../../img/upload/barang/" . $row['gambar_barang'] . "' alt='' width='100'></td>";
             echo "<td>" . $row['nama_barang'] . "</td>";
             echo "<td>" . $row['kategori'] . "</td>";
             echo "<td>" . $row['stok'] . "</td>";
@@ -31,12 +31,9 @@ if (isset($_POST['query'])) {
                               <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalTambahStok" onclick="tambah_stok('.$row['id_barang'].')">
                                   <i class="bx bx-plus-circle me-1"></i> Tambah Stok
                               </a>
-                              <form action="../../controller/hapus_barang.php" method="POST">
-                                  <input type="hidden" name="id_barang" value="'.$row['id_barang'].'">
-                                  <button type="submit" class="dropdown-item" name="hapus_barang">
-                                      <i class="bx bx-trash me-1"></i> Delete
-                                  </button>
-                              </form>
+                              <button type="button" class="dropdown-item" onclick="hapus_barang('. $row['id_barang'] .')">
+                                <i class="bx bx-trash me-1"></i> Delete
+                              </button>
                           </div>
                         </div>
                       </td>';
@@ -142,7 +139,7 @@ if (isset($_POST['query'])) {
                 </div>
                 <div class="col text-end">
                   <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalImport">Impor Data</button>
-                  <a href="../../controller/export.php" class="btn btn-success">Export Data</a>
+                  <a href="../../controller/export_d.php" class="btn btn-success">Export Data</a>
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahBarang">Tambah Barang</button>
                 </div>
               </div>
@@ -156,7 +153,7 @@ if (isset($_POST['query'])) {
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      <form  action="../../controller/import.php" method="POST" enctype="multipart/form-data">
+                      <form  action="../../controller/import_d.php" method="POST" enctype="multipart/form-data">
                         <input class="form-control" type="file" name="file_excel" accept=".xlsx,.xls">
                         <button type="submit" class="btn btn-primary mt-3" name="Import">Import</button>
                       </form>
@@ -174,12 +171,20 @@ if (isset($_POST['query'])) {
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      <form action="../../controller/tambah_barang.php" method="POST">
+                      <form action="../../controller/tambah_barang_d.php" method="POST" enctype="multipart/form-data">
                         <!-- Input untuk nama barang -->
-                        <div class="mb-3">
-                          <label for="namaBarang" class="form-label">Nama Barang</label>
-                          <input type="text" class="form-control" id="namaBarang" name="nama_barang" placeholder="Nama Barang" required>
-                        </div>
+                         <div class="row mb-3">
+                          <div class="col">
+                            <label for="namaBarang" class="form-label">Nama Barang</label>
+                            <input type="text" class="form-control" id="namaBarang" name="nama_barang" placeholder="Nama Barang" required>
+                          </div>
+                        <!-- Input untuk Gambar -->
+                          <div class="col">
+                            <label for="gambarBarang" class="form-label">Gambar Barang</label>
+                            <input type="file" class="form-control" id="gambarBarang" name="gambar_barang" accept="image/*" required>
+                          </div>
+                         </div>
+                        
                         <!-- Input untuk kategori -->
                         <div class="mb-3">
                           <div class="row">
@@ -196,8 +201,10 @@ if (isset($_POST['query'])) {
                         <!-- Input untuk Lokasi -->
                         <div class="mb-3">
                           <label for="harga" class="form-label">Harga</label>
-                          <input type="number" class="form-control" id="lokasi" name="harga" placeholder="Harga" required>
+                          <input type="number" class="form-control" id="harga" name="harga" placeholder="Harga" required>
+                          <input type="hidden" class="form-control" id="lokasi" name="lokasi" value="">
                         </div>
+
                         <!-- Tombol untuk menyimpan data -->
                         <button type="submit" class="btn btn-primary">Simpan</button>
                       </form>
@@ -206,6 +213,7 @@ if (isset($_POST['query'])) {
                 </div>
               </div>
 
+
               <!-- Tabel Barang -->
               <div class="card">
                 <div class="table-responsive text-nowrap">
@@ -213,7 +221,7 @@ if (isset($_POST['query'])) {
                     <thead>
                       <tr>
                         <th>No.</th>
-                        <th>ID Barang</th>
+                        <th>Gambar Barang</th>
                         <th>Nama Barang</th>
                         <th>Kategori</th>
                         <th>Stok</th>
@@ -238,25 +246,30 @@ if (isset($_POST['query'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <form id="editBarangForm" action="../../controller/edit_barang.php" method="POST">
-                      <input type="hidden" id="edit_id_barang" name="id_barang">
-                      <div class="mb-3">
-                        <label for="edit_namaBarang" class="form-label">Nama Barang</label>
-                        <input type="text" class="form-control" id="edit_namaBarang" name="nama_barang" placeholder="Nama Barang" required>
-                      </div>
-                      <div class="row mb-3">
-                        <div class="col">
-                          <label for="edit_kategori" class="form-label">Kategori</label>
-                          <input type="text" class="form-control" id="edit_kategori" name="kategori" placeholder="Kategori" required>
-                        </div>
-                        <div class="col">
-                          <label for="edit_harga" class="form-label">Harga</label>
-                          <input type="number" class="form-control" id="edit_harga" name="harga" placeholder="Harga" required>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Simpan</button>
-                    </form>
+                      <form id="editBarangForm" action="../../controller/edit_barang_d.php" method="POST" enctype="multipart/form-data">
+                          <input type="hidden" id="edit_id_barang" name="id_barang">
+                          <div class="mb-3">
+                              <label for="edit_namaBarang" class="form-label">Nama Barang</label>
+                              <input type="text" class="form-control" id="edit_namaBarang" name="nama_barang" placeholder="Nama Barang" required>
+                          </div>
+                          <div class="row mb-3">
+                              <div class="col">
+                                  <label for="edit_kategori" class="form-label">Kategori</label>
+                                  <input type="text" class="form-control" id="edit_kategori" name="kategori" placeholder="Kategori" required>
+                              </div>
+                              <div class="col">
+                                  <label for="edit_harga" class="form-label">Harga</label>
+                                  <input type="number" class="form-control" id="edit_harga" name="harga" placeholder="Harga" required>
+                              </div>
+                          </div>
+                          <div class="mb-3">
+                              <label for="edit_gambar" class="form-label">Gambar</label>
+                              <input type="file" class="form-control" id="edit_gambar" name="gambar_barang">
+                          </div>
+                          <button type="submit" class="btn btn-primary">Simpan</button>
+                      </form>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -283,6 +296,27 @@ if (isset($_POST['query'])) {
                 </div>
               </div>
             </div>
+
+            <!-- Modal Hapus Barang -->
+            <div class="modal fade" id="modalHapusBarang" tabindex="-1" aria-labelledby="modalHapusBarangLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalHapusBarangLabel">Hapus Barang</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Apakah anda yakin? Semua data yang berhubungan akan ikut terhapus</p>
+                    </div>
+                    <div class="modal-footer">
+                      <form id="formHapusBarang" action="../../controller/hapus_barang.php" method="POST">
+                        <input type="hidden" id="hapus_id_barang" name="id_barang">
+                        <button type="submit" class="btn btn-danger">Konfirmasi Hapus</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             <!-- / Content -->
 
@@ -353,6 +387,12 @@ if (isset($_POST['query'])) {
 
       function tambah_stok(id_barang) {
         $('#tambah_stok_id_barang').val(id_barang);
+      }
+
+      // Fungsi untuk menampilkan modal konfirmasi penghapusan
+      function hapus_barang(id_barang) {
+        $('#hapus_id_barang').val(id_barang);
+        $('#modalHapusBarang').modal('show');
       }
     </script>
   </body>

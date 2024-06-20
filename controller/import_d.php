@@ -27,9 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $nama = $row['A'];
                 $kategori = $row['B'];
                 $stok = $row['C'];
-                $lokasi = $row['D'];
+                $harga = $row['D'];
 
-                $query = "INSERT INTO barang (id_user, nama_barang, kategori, stok, lokasi) VALUES ({$_SESSION['id']}, '$nama', '$kategori', '$stok', '$lokasi')";
+                $query = "INSERT INTO barang (id_user, nama_barang, kategori, stok, harga) VALUES ({$_SESSION['id']}, '$nama', '$kategori', '$stok', '$harga')";
                 $result = $koneksi->query($query); 
             }
             $_SESSION['pesan'] = "Data Excel berhasil di import ke database";

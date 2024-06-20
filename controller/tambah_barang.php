@@ -5,9 +5,9 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_barang = $_POST["nama_barang"];
     $kategori = $_POST["kategori"];
-    $deskripsi = $_POST["deskripsi"];
     $stok = $_POST["stok"];
     $harga = $_POST["harga"];
+    $lokasi = $_POST["lokasi"]; 
 
     $query = "INSERT INTO barang (id_user, nama_barang, kategori, stok, lokasi, harga) VALUES ('{$_SESSION['id']}','$nama_barang', '$kategori', $stok, '$lokasi', '$harga')";
 

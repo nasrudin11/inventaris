@@ -105,7 +105,7 @@
                 </div>
               </div>
 
-            <!-- Tambahkan modal -->
+            <!-- modal cetak -->
             <div class="modal fade" id="cetakModal" tabindex="-1" aria-labelledby="cetakModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -172,14 +172,7 @@
               document.getElementById('bulan_awal').value = new Date().getMonth() + 1; // +1 karena bulan dimulai dari 0
               document.getElementById('bulan_akhir').value = new Date().getMonth() + 1;
             });
-          </script>
-
-
-
-
-
-
-            
+          </script>            
 
               <div class="card">
                 <div class="table-responsive text-nowrap">
@@ -209,8 +202,8 @@
                             echo "<td>" . $no . "</td>";
                             echo "<td>" . $row['nama_peminjam'] . "</td>";
                             echo "<td>" . $row['total_jumlah'] . "</td>";
-                            echo "<td>" . $row['tgl_peminjaman'] . "</td>";
-                            echo "<td>" . $row['tgl_pengembalian'] . "</td>";
+                            echo "<td>" . date('d F Y', strtotime($row['tgl_peminjaman'])) . "</td>";
+                            echo "<td>" . date('d F Y', strtotime($row['tgl_pengembalian'])) . "</td>";
                             echo "</tr>";
                             $no++;
                           }

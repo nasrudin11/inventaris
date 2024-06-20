@@ -84,18 +84,33 @@
             <div class="container-xxl flex-grow-1 container-p-y">
 
             <?php
-                if (isset($_SESSION['pesan'])) {
-                    echo "<div class='alert alert-success' id='notification'>{$_SESSION['pesan']}</div>";
+            // Menampilkan pesan sukses
+            if (isset($_SESSION['pesan'])) {
+                echo "<div class='alert alert-success' id='notification-success'>{$_SESSION['pesan']}</div>";
 
-                    echo "<script>
-                            setTimeout(function() {
-                            document.getElementById('notification').remove();
-                            }, 3000);
-                        </script>";
+                echo "<script>
+                        setTimeout(function() {
+                            document.getElementById('notification-success').remove();
+                        }, 3000);
+                    </script>";
 
-                    unset($_SESSION['pesan']);
-                }
+                unset($_SESSION['pesan']);
+            }
+
+            // Menampilkan pesan error
+            if (isset($_SESSION['error_message'])) {
+                echo "<div class='alert alert-danger' id='notification-error'>{$_SESSION['error_message']}</div>";
+
+                echo "<script>
+                        setTimeout(function() {
+                            document.getElementById('notification-error').remove();
+                        }, 3000);
+                    </script>";
+
+                unset($_SESSION['error_message']);
+            }
             ?>
+
 
             <div class="text-end mb-3">
                 <a href="riwayat_pem.php" class="btn btn-secondary">Riwayat</a>
@@ -123,8 +138,21 @@
                                     <div class="mb-3 barang-item">
                                         <div class="row">
                                             <div class="col">
-                                                <label for="idBarang" class="form-label">ID Barang</label>
-                                                <input type="text" class="form-control" id="idBarang" name="id_barang[]" placeholder="ID Barang" required>
+                                                <label for="idBarang" class="form-label">Nama Barang</label>
+                                                <select class="form-control" id="idBarang" name="id_barang[]">
+                                                    <?php
+                                                     $sql = "SELECT id_barang, nama_barang FROM barang WHERE id_user = {$_SESSION['id']}";
+                                                     $result = $koneksi->query($sql);
+
+                                                    if ($result->num_rows > 0) {
+                                                        while($row = $result->fetch_assoc()) {
+                                                            echo '<option value="' . $row['id_barang'] . '">' . $row['id_barang'] .' - '. $row['nama_barang'] . '</option>';
+                                                        }
+                                                    } else {
+                                                        echo '<option value="">No items found</option>';
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
                                             <div class="col">
                                                 <label for="jumlah" class="form-label">Jumlah</label>
@@ -206,7 +234,7 @@
                         </thead>
                         <tbody class="table-border-bottom-0">
                           <?php
-                            $query = " SELECT p.*, SUM(pd.jumlah) AS total_jumlah
+                            $query = "SELECT p.*, SUM(pd.jumlah) AS total_jumlah
                             FROM peminjaman p
                             JOIN peminjaman_dtl pd ON p.id_peminjaman = pd.id_peminjaman
                             WHERE p.id_user = '{$_SESSION['id']}' AND p.status = 'dipinjam'
@@ -220,8 +248,8 @@
                                     echo "<td>" . $no . "</td>";
                                     echo "<td>" . $row['nama_peminjam'] . "</td>";
                                     echo "<td>" . $row['total_jumlah'] . "</td>";
-                                    echo "<td>" . $row['tgl_peminjaman'] . "</td>";
-                                    echo "<td>" . $row['tgl_pengembalian'] . "</td>";
+                                    echo "<td>" . date('d F Y', strtotime($row['tgl_peminjaman'])) . "</td>";
+                                    echo "<td>" . date('d F Y', strtotime($row['tgl_pengembalian'])) . "</td>";
                                     echo '<td>
                                             <div class="dropdown">
                                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -231,13 +259,6 @@
                                                     <a class="dropdown-item" href="peminjaman_dtl.php?id_peminjaman=' . $row['id_peminjaman'] . '">
                                                         <i class="bx bx-edit-alt me-1"></i> Lihat
                                                     </a>
-                                                    
-                                                    <form action="../../controller/hapus_barang.php" method="POST">
-                                                        <input type="hidden" name="id_peminjaman" value="'.$row['id_peminjaman'].'">
-                                                        <button type="submit" class="dropdown-item" name="hapus_barang">
-                                                            <i class="bx bx-trash me-1"></i> Delete
-                                                        </button>
-                                                    </form>
                                                 </div>
                                               </div>
                                             </td>';

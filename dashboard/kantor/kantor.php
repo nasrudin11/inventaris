@@ -6,7 +6,11 @@ if (isset($_POST['query'])) {
     $query = $_POST['query'];
     $id_user = $_SESSION['id'];
 
-    $sql = "SELECT * FROM barang WHERE id_user = '$id_user' AND (nama_barang LIKE '%$query%' OR id_barang LIKE '%$query%')";
+    $sql = "SELECT b.*, GROUP_CONCAT(s.nama_status SEPARATOR ', ') AS statuses FROM barang b 
+    LEFT JOIN status_barang s ON b.id_barang = s.id_barang 
+    WHERE b.id_user = '$id_user' AND (b.nama_barang LIKE '%$query%' OR b.id_barang LIKE '%$query%') 
+    GROUP BY b.id_barang
+    ORDER BY b.nama_barang";
     $result = $koneksi->query($sql);
 
     if ($result && $result->num_rows > 0) {
@@ -14,11 +18,28 @@ if (isset($_POST['query'])) {
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
             echo "<td>" . $no . "</td>";
-            echo "<td>" . $row['id_barang'] . "</td>";
             echo "<td>" . $row['nama_barang'] . "</td>";
             echo "<td>" . $row['kategori'] . "</td>";
             echo "<td>" . $row['stok'] . "</td>";
             echo "<td>" . $row['lokasi'] . "</td>";
+            
+            // Split statuses and create badges for each
+            $statusArray = explode(', ', $row['statuses']);
+            echo "<td>";
+            foreach ($statusArray as $status) {
+              $badgeClass = 'bg-secondary'; 
+              if (trim($status) == 'Baik') {
+                  $badgeClass = 'bg-success';
+              } elseif (trim($status) == 'Maintenance') {
+                  $badgeClass = 'bg-warning';
+              } elseif (trim($status) == 'Rusak') {
+                  $badgeClass = 'bg-danger';
+              }
+              echo '<span class="badge rounded-pill ' . $badgeClass . ' ms-2">' . trim($status) . '</span>';
+          }
+          
+            echo "</td>";
+
             echo '<td>
                       <div class="dropdown">
                           <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -31,12 +52,9 @@ if (isset($_POST['query'])) {
                               <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalTambahStok" onclick="tambah_stok('.$row['id_barang'].')">
                                   <i class="bx bx-plus-circle me-1"></i> Tambah Stok
                               </a>
-                              <form action="../../controller/hapus_barang.php" method="POST">
-                                  <input type="hidden" name="id_barang" value="'.$row['id_barang'].'">
-                                  <button type="submit" class="dropdown-item" name="hapus_barang">
-                                      <i class="bx bx-trash me-1"></i> Delete
-                                  </button>
-                              </form>
+                              <button type="button" class="dropdown-item" onclick="hapus_barang('. $row['id_barang'] .')">
+                                <i class="bx bx-trash me-1"></i> Delete
+                              </button>
                           </div>
                         </div>
                       </td>';
@@ -44,10 +62,11 @@ if (isset($_POST['query'])) {
             $no++;
         }
     } else {
-        echo "<tr><td colspan='7'>Tidak ada data barang</td></tr>";
+        echo "<tr><td colspan='8'>Tidak ada data barang</td></tr>";
     }
     exit;
 }
+
 ?>
 
 
@@ -197,6 +216,7 @@ if (isset($_POST['query'])) {
                         <div class="mb-3">
                           <label for="lokasi" class="form-label">Lokasi</label>
                           <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="Lokasi" required>
+                          <input type="hidden" class="form-control" id="harga" name="harga" value="0">
                         </div>
                         <!-- Tombol untuk menyimpan data -->
                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -213,11 +233,11 @@ if (isset($_POST['query'])) {
                     <thead>
                       <tr>
                         <th>No.</th>
-                        <th>ID Barang</th>
                         <th>Nama Barang</th>
                         <th>Kategori</th>
                         <th>Stok</th>
                         <th>Lokasi</th>
+                        <th>Status</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -271,11 +291,11 @@ if (isset($_POST['query'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <form action="../../controller/tambah_stok.php" method="POST">
+                    <form action="../../controller/stok_barang.php" method="POST">
                       <input type="hidden" id="tambah_stok_id_barang" name="id_barang">
                       <div class="mb-3">
                         <label for="tambah_stok" class="form-label">Jumlah Stok</label>
-                        <input type="text" class="form-control" id="tambah_stok" name="jumlah_stok" placeholder="Jumlah Stok" required>
+                        <input type="number" class="form-control" id="tambah_stok" name="jumlah_stok" placeholder="Jumlah Stok" required>
                       </div>
                       <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
@@ -283,6 +303,27 @@ if (isset($_POST['query'])) {
                 </div>
               </div>
             </div>
+
+            <!-- Modal Hapus Barang -->
+            <div class="modal fade" id="modalHapusBarang" tabindex="-1" aria-labelledby="modalHapusBarangLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalHapusBarangLabel">Hapus Barang</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Apakah anda yakin? Semua data yang berhubungan akan ikut terhapus</p>
+                    </div>
+                    <div class="modal-footer">
+                      <form id="formHapusBarang" action="../../controller/hapus_barang.php" method="POST">
+                        <input type="hidden" id="hapus_id_barang" name="id_barang">
+                        <button type="submit" class="btn btn-danger">Konfirmasi Hapus</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             <!-- / Content -->
 
@@ -354,6 +395,13 @@ if (isset($_POST['query'])) {
       function tambah_stok(id_barang) {
         $('#tambah_stok_id_barang').val(id_barang);
       }
+      
+      // Fungsi untuk menampilkan modal konfirmasi penghapusan
+      function hapus_barang(id_barang) {
+        $('#hapus_id_barang').val(id_barang);
+        $('#modalHapusBarang').modal('show');
+      }
+
     </script>
   </body>
 </html>

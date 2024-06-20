@@ -29,7 +29,7 @@
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a class="dropdown-item" href="<?php echo ($_SESSION['role'] === 'Inventaris Kantor') ? 'profil_k.php' : 'profil_d.php'; ?>">
+                    <a class="dropdown-item" href="<?php echo ($_SESSION['role'] == 'Inventaris Kantor') ? 'profil_k.php' : (($_SESSION['role'] == 'Distributor') ? 'profil_d.php' : '#'); ?>">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">

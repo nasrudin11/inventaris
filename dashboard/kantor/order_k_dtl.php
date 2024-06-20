@@ -22,6 +22,21 @@
 
     <title>Dashboard - Kantor</title>
 
+    <style>
+      .fixed-size-img {
+          width: 100%;
+          height: 200px; 
+          object-fit: cover;
+      }
+
+    .btn-small {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    </style>
+
+
     <meta nama="description" content="" />
 
     <!-- Favicon -->
@@ -82,7 +97,7 @@
           <div class="content-wrapper">
               <!-- Content -->
             <?php
-              $query = "SELECT u.role, p.nama, p.gambar_profil, b.* FROM user u
+              $query = "SELECT u.role, p.nama, b.* FROM user u
               JOIN profil p ON u.id_user = p.id_user 
               JOIN barang b ON b.id_user = u.id_user
               WHERE role = 'Distributor'";
@@ -139,9 +154,9 @@
                                   <input type="hidden" name="id_barang[]" value="<?php echo $row["id_barang"] ?>">
                                   <input type="hidden" name="harga[]" value="<?php echo $row["harga"] ?>">
                                   <input type="hidden" name="id_distributor" value="<?php echo $row["id_user"] ?>">
-                                  <div class="col-md-3">
+                                  <div class="col-md-3 mb-3">
                                       <div class="card shadow p-2">
-                                          <img src="../../img/upload/profil/<?php echo $row["gambar_profil"] ?>" class="card-img-top" alt="<?php echo $row["gambar_profil"] ?>">
+                                          <img src="../../img/upload/barang/<?php echo $row["gambar_barang"] ?>" class="card-img-top fixed-size-img" alt="<?php echo $row["gambar_barang"] ?>">
                                           <div class="card-body p-0">
                                               <div class="accordion" id="accordionExample-<?php echo $row["id_barang"] ?>">
                                                   <div class="accordion-item">
@@ -160,9 +175,9 @@
                                                       </div>
                                                   </div>
                                                   <div class="d-flex justify-content-between align-items-center p-3">
-                                                      <button class="btn btn-outline-secondary" type="button" onclick="decreaseValue('quantity-<?php echo $row["id_barang"] ?>')">-</button>
-                                                      <input type="number" name="quantities[]" id="quantity-<?php echo $row["id_barang"] ?>" class="form-control text-center" value="0" min="0" style="width: 60px;">
-                                                      <button class="btn btn-outline-secondary" type="button" onclick="increaseValue('quantity-<?php echo $row["id_barang"] ?>')">+</button>
+                                                      <button class="btn btn-outline-secondary btn-sm" type="button" onclick="decreaseValue('quantity-<?php echo $row["id_barang"] ?>')">-</button>
+                                                      <input type="number" name="quantities[]" id="quantity-<?php echo $row["id_barang"] ?>" class="form-control text-center" value="0" min="0" style="width: 100px;">
+                                                      <button class="btn btn-outline-secondary btn-sm" type="button" onclick="increaseValue('quantity-<?php echo $row["id_barang"] ?>')">+</button>
                                                   </div>
                                               </div>
                                           </div>

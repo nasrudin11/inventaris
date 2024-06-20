@@ -211,8 +211,8 @@
                                     echo "<td>" . $row['id_barang'] . "</td>";
                                     echo "<td>" . $row['nama_barang'] . "</td>";
                                     echo "<td>" . $row['jumlah'] . "</td>";
-                                    echo "<td>" . $row['tgl_maintenance'] . "</td>";
-                                    echo "<td>" . $row['tgl_main_kembali'] . "</td>";
+                                    echo "<td>" . date('d F Y', strtotime($row['tgl_maintenance'])) . "</td>";
+                                    echo "<td>" . date('d F Y', strtotime($row['tgl_main_kembali'])) . "</td>";
                                     echo "<td><button class='btn btn-primary' style='background-color: #3ac7c0; border:none' name='submit' disabled>Returned</button></td>";
                                     echo "</tr>";
                                     $no++;

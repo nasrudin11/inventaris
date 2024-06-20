@@ -7,7 +7,14 @@ function editProfil($nama, $no_tlp, $alamat, $deskripsi, $id_user, $koneksi) {
 
     if ($koneksi->query($query) === TRUE) {
         $_SESSION['pesan'] = "Berhasil melakukan update profil.";
-        header("Location:  ../dashboard/kantor/profil_k.php");
+        $koneksi->query($query2 = "INSERT INTO riwayat (id_user, riwayat) VALUES ('{$_SESSION['id']}', 'Edit detail profile')");
+
+        if($_SESSION['role'] == "Inventaris Kantor"){
+            header("Location: ../dashboard/kantor/profil_k.php");
+        }else{
+            $_SESSION['pesan'] = "Berhasil melakukan update profil.";
+            header("Location: ../dashboard/distributor/profil_d.php");
+        }
         exit();
     } else {
     }
@@ -26,6 +33,7 @@ function editGambarProfil($gambar_profil, $id_user, $koneksi) {
             if($_SESSION['role'] == "Inventaris Kantor"){
                 header("Location: ../dashboard/kantor/profil_k.php");
             }else{
+                $_SESSION['pesan'] = "Data foto profil berhasil diunggah.";
                 header("Location: ../dashboard/distributor/profil_d.php");
             }
             exit();

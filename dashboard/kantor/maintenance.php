@@ -84,17 +84,31 @@
             <div class="container-xxl flex-grow-1 container-p-y">
 
             <?php
-                if (isset($_SESSION['pesan'])) {
-                    echo "<div class='alert alert-success' id='notification'>{$_SESSION['pesan']}</div>";
+            // Menampilkan pesan sukses
+            if (isset($_SESSION['pesan'])) {
+                echo "<div class='alert alert-success' id='notification-success'>{$_SESSION['pesan']}</div>";
 
-                    echo "<script>
-                            setTimeout(function() {
-                            document.getElementById('notification').remove();
-                            }, 3000);
-                        </script>";
+                echo "<script>
+                        setTimeout(function() {
+                            document.getElementById('notification-success').remove();
+                        }, 3000);
+                    </script>";
 
-                    unset($_SESSION['pesan']);
-                }
+                unset($_SESSION['pesan']);
+            }
+
+            // Menampilkan pesan error
+            if (isset($_SESSION['error_message'])) {
+                echo "<div class='alert alert-danger' id='notification-error'>{$_SESSION['error_message']}</div>";
+
+                echo "<script>
+                        setTimeout(function() {
+                            document.getElementById('notification-error').remove();
+                        }, 3000);
+                    </script>";
+
+                unset($_SESSION['error_message']);
+            }
             ?>
 
             <div class="text-end mb-3">
@@ -117,8 +131,21 @@
                                   <div class="mb-3">
                                     <div class="row">
                                       <div class="col">
-                                        <label for="idBarang" class="form-label">ID barang</label>
-                                        <input type="text" class="form-control" id="idBarang" name="id_barang" placeholder="ID Barang" required>
+                                        <label for="idBarang" class="form-label">Nama barang</label>
+                                        <select class="form-control" id="id_barang" name="id_barang">
+                                            <?php
+                                            $sql = "SELECT id_barang, nama_barang FROM barang WHERE id_user = {$_SESSION['id']}";
+                                            $result = $koneksi->query($sql);
+
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo '<option value="' . $row['id_barang'] . '">' . $row['nama_barang'] . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="">No items found</option>';
+                                            }
+                                            ?>
+                                        </select>
                                       </div>
                                       <div class="col">
                                         <label for="jumlah" class="form-label">Jumlah</label>
@@ -165,10 +192,10 @@
                                     echo "<td>" . $row['id_barang'] . "</td>";
                                     echo "<td>" . $row['nama_barang'] . "</td>";
                                     echo "<td>" . $row['jumlah'] . "</td>";
-                                    echo "<td>" . $row['tgl_maintenance'] . "</td>";
+                                    echo "<td>" . date('d F Y', strtotime($row['tgl_maintenance'])) . "</td>";
                                     echo '<td>
                                             <form action="../../controller/return_maintenance.php" method="POST">
-                                                <input type="hidden" name="id_peminjaman" value="'.$row['id_maintenance'].'">
+                                                <input type="hidden" name="id_maintenance" value="'.$row['id_maintenance'].'">
                                                 <button type="submit" class="btn btn-primary" style="background-color: #3ac7c0; border:none" name="return_maintenance">
                                                     Return
                                                 </button>

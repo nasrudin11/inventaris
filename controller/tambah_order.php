@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        $_SESSION['pesan'] = "Data barang berhasil ditambahkan.";
+        $_SESSION['pesan'] = "Pemesanan data barang berhasil dilakukan";
         header("Location: ../dashboard/kantor/order_k_dtl.php");
         exit();
     } else {
