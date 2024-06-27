@@ -196,6 +196,7 @@
                                     echo '<td>
                                             <form action="../../controller/return_maintenance.php" method="POST">
                                                 <input type="hidden" name="id_maintenance" value="'.$row['id_maintenance'].'">
+                                                <input type="hidden" name="jumlah" value="'.$row['jumlah'].'">
                                                 <button type="submit" class="btn btn-primary" style="background-color: #3ac7c0; border:none" name="return_maintenance">
                                                     Return
                                                 </button>

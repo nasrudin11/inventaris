@@ -136,13 +136,14 @@
                                           <td><?php echo $row['jumlah']; ?></td>
                                           <td>
                                               <form action="../../controller/return_peminjaman.php" method="POST">
-                                                  <select class="form-select" id="exampleFormControlSelect1" name="status">
-                                                    <?php if ($row['status'] == 'dikembalikan') { ?>
-                                                      <option selected><?php echo $row['status']; ?></option>
-                                                    <?php } ?>
-                                                      <option value="Baik">Baik</option>
-                                                      <option value="Rusak">Rusak</option>
-                                                  </select>
+                                                <input type="hidden" name="jumlah" value="<?php echo $row['jumlah']; ?>">
+                                                <select class="form-select" id="exampleFormControlSelect1" name="status">
+                                                  <?php if ($row['status'] == 'dikembalikan') { ?>
+                                                    <option selected><?php echo $row['status']; ?></option>
+                                                  <?php } ?>
+                                                    <option value="Baik">Baik</option>
+                                                    <option value="Rusak">Rusak</option>
+                                                </select>
                                           </td>
                                           <td>
                                               <?php if ($row['status'] == 'dipinjam') { ?>

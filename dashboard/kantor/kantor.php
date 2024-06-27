@@ -22,30 +22,15 @@ if (isset($_POST['query'])) {
             echo "<td>" . $row['kategori'] . "</td>";
             echo "<td>" . $row['stok'] . "</td>";
             echo "<td>" . $row['lokasi'] . "</td>";
-            
-            // Split statuses and create badges for each
-            $statusArray = explode(', ', $row['statuses']);
-            echo "<td>";
-            foreach ($statusArray as $status) {
-              $badgeClass = 'bg-secondary'; 
-              if (trim($status) == 'Baik') {
-                  $badgeClass = 'bg-success';
-              } elseif (trim($status) == 'Maintenance') {
-                  $badgeClass = 'bg-warning';
-              } elseif (trim($status) == 'Rusak') {
-                  $badgeClass = 'bg-danger';
-              }
-              echo '<span class="badge rounded-pill ' . $badgeClass . ' ms-2">' . trim($status) . '</span>';
-          }
-          
-            echo "</td>";
-
             echo '<td>
                       <div class="dropdown">
                           <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                               <i class="bx bx-dots-vertical-rounded"></i>
                           </button>
                           <div class="dropdown-menu">
+                              <a class="dropdown-item" href="kantor_detail.php?id_barang='.$row['id_barang'].'" >
+                                  <i class="bx bx-detail me-1"></i> Detail
+                              </a>
                               <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalEditBarang" onclick="edit_barang('.$row['id_barang'].')">
                                   <i class="bx bx-edit-alt me-1"></i> Edit
                               </a>
@@ -237,7 +222,6 @@ if (isset($_POST['query'])) {
                         <th>Kategori</th>
                         <th>Stok</th>
                         <th>Lokasi</th>
-                        <th>Status</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
